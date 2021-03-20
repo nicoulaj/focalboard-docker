@@ -56,6 +56,13 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ env.DOCKERHUB_REPO }}
+          label-custom: |
+            maintainer=nicoulaj
+            org.opencontainers.image.title=focalboard
+            org.opencontainers.image.description=Focalboard is an open source, self-hosted alternative to Trello, Notion, and Asana.
+            org.opencontainers.image.url=https://www.focalboard.com
+            org.opencontainers.image.licenses=Mattermost Licensing
+            org.opencontainers.image.version=${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
