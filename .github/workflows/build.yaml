@@ -37,9 +37,6 @@ jobs:
           - platform: linux/arm64/v8
             platform_tag_name: linux-arm64-v8
             goarch: arm64
-          - platform: linux/mips64
-            platform_tag_name: linux-mips64
-            goarch: mips64
           - platform: linux/mips64le
             platform_tag_name: linux-mips64le
             goarch: mips64le
@@ -49,9 +46,6 @@ jobs:
           - platform: linux/s390x
             platform_tag_name: linux-s390x
             goarch: s390x
-          - platform: linux/riscv64
-            platform_tag_name: linux-riscv64
-            goarch: riscv64
 
     name: ${{ matrix.platform }}
 
