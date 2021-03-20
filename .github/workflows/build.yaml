@@ -23,10 +23,13 @@ jobs:
         platform: [ 'linux/amd64', 'linux/arm/v6', 'linux/arm/v7' ]
         include:
           - platform: linux/amd64
+            platform_tag_name: linux-amd64
             goarch: amd64
           - platform: linux/arm/v6
+            platform_tag_name: linux-arm-v6
             goarch: arm
           - platform: linux/arm/v7
+            platform_tag_name: linux-arm-v7
             goarch: arm
 
     name: ${{ matrix.platform }}
@@ -34,11 +37,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Define platform tag name
-        env:
-          matrix_platform: ${{ matrix.platform }}
-        run: echo "::set-env name=PLATFORM_TAG_NAME::${matrix_platform////-}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -64,11 +62,11 @@ jobs:
                       FOCALBOARD_INCREMENT=${{ env.FOCALBOARD_INCREMENT }},
                       GOARCH=${{ matrix.goarch }}
           platforms: ${{ matrix.platform }}
-          tags: ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}-${{ env.PLATFORM_TAG_NAME }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}-${{ env.PLATFORM_TAG_NAME }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}-${{ env.PLATFORM_TAG_NAME }},
+          tags: ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}-${{ matrix.platform_tag_name }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}-${{ matrix.platform_tag_name }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}-${{ matrix.platform_tag_name }},
                 ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.PLATFORM_TAG_NAME }},
+                ${{ env.DOCKERHUB_REPO }}:${{ matrix.platform_tag_name }},
                 ${{ env.DOCKERHUB_REPO }}:latest
 
       - name: Image digest
