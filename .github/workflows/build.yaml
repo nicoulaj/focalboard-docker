@@ -55,19 +55,20 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          # push: ${{ github.event_name != 'pull_request' }}
-          push: false
-          build-args: FOCALBOARD_MAJOR=${{ env.FOCALBOARD_MAJOR }},
-                      FOCALBOARD_MINOR=${{ env.FOCALBOARD_MINOR }},
-                      FOCALBOARD_INCREMENT=${{ env.FOCALBOARD_INCREMENT }},
-                      GOARCH=${{ matrix.goarch }}
           platforms: ${{ matrix.platform }}
-          tags: ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}-${{ matrix.platform_tag_name }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}-${{ matrix.platform_tag_name }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}-${{ matrix.platform_tag_name }},
-                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }},
-                ${{ env.DOCKERHUB_REPO }}:${{ matrix.platform_tag_name }},
-                ${{ env.DOCKERHUB_REPO }}:latest
+          push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            FOCALBOARD_MAJOR=${{ env.FOCALBOARD_MAJOR }}
+            FOCALBOARD_MINOR=${{ env.FOCALBOARD_MINOR }}
+            FOCALBOARD_INCREMENT=${{ env.FOCALBOARD_INCREMENT }}
+            GOARCH=${{ matrix.goarch }}
+          tags: |
+            ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}-${{ matrix.platform_tag_name }}
+            ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}-${{ matrix.platform_tag_name }}
+            ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}-${{ matrix.platform_tag_name }}
+            ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}
+            ${{ env.DOCKERHUB_REPO }}:${{ matrix.platform_tag_name }}
+            ${{ env.DOCKERHUB_REPO }}:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
