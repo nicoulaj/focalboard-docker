@@ -54,6 +54,8 @@ jobs:
     steps:
       - name: Generate Docker image labels
         uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ${{ env.DOCKERHUB_REPO }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
