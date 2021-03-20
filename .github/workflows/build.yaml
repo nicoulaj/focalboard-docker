@@ -1,0 +1,75 @@
+name: build
+
+env:
+  DOCKERHUB_REPO: nicoulaj/focalboard
+  FOCALBOARD_MAJOR: 0
+  FOCALBOARD_MINOR: 6
+  FOCALBOARD_INCREMENT: 1
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ 'linux/amd64', 'linux/arm/v6', 'linux/arm/v7' ]
+        include:
+          - platform: linux/amd64
+            goarch: amd64
+          - platform: linux/arm/v6
+            goarch: arm
+          - platform: linux/arm/v7
+            goarch: arm
+
+    name: ${{ matrix.platform }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Define platform tag name
+        env:
+          matrix_platform: ${{ matrix.platform }}
+        run: echo "::set-env name=PLATFORM_TAG_NAME::${matrix_platform////-}"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          # push: ${{ github.event_name != 'pull_request' }}
+          push: false
+          build-args: FOCALBOARD_MAJOR=${{ env.FOCALBOARD_MAJOR }},
+                      FOCALBOARD_MINOR=${{ env.FOCALBOARD_MINOR }},
+                      FOCALBOARD_INCREMENT=${{ env.FOCALBOARD_INCREMENT }},
+                      GOARCH=${{ matrix.goarch }}
+          platforms: ${{ matrix.platform }}
+          tags: ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}-${{ env.PLATFORM_TAG_NAME }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}-${{ env.PLATFORM_TAG_NAME }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}-${{ env.PLATFORM_TAG_NAME }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }},
+                ${{ env.DOCKERHUB_REPO }}:${{ env.PLATFORM_TAG_NAME }},
+                ${{ env.DOCKERHUB_REPO }}:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
