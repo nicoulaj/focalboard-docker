@@ -5,8 +5,6 @@ ARG FOCALBOARD_MINOR
 ARG FOCALBOARD_INCREMENT
 ARG GOARCH
 
-RUN echo "Building v${FOCALBOARD_MAJOR}.${FOCALBOARD_MINOR}.${FOCALBOARD_INCREMENT} on ${BUILDPLATFORM} for ${TARGETPLATFORM}"
-
 RUN apt-get update
 RUN apt-get install -y nodejs npm
 RUN git clone -b "v${FOCALBOARD_MAJOR}.${FOCALBOARD_MINOR}.${FOCALBOARD_INCREMENT}" --depth 1 https://github.com/mattermost/focalboard.git /focalboard

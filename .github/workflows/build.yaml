@@ -25,12 +25,33 @@ jobs:
           - platform: linux/amd64
             platform_tag_name: linux-amd64
             goarch: amd64
+          - platform: linux/386
+            platform_tag_name: linux-386
+            goarch: 386
           - platform: linux/arm/v6
             platform_tag_name: linux-arm-v6
             goarch: arm
           - platform: linux/arm/v7
             platform_tag_name: linux-arm-v7
             goarch: arm
+          - platform: linux/arm64/v8
+            platform_tag_name: linux-arm64-v8
+            goarch: arm64
+          - platform: linux/mips64
+            platform_tag_name: linux-mips64
+            goarch: mips64
+          - platform: linux/mips64le
+            platform_tag_name: linux-mips64le
+            goarch: mips64le
+          - platform: linux/ppc64le
+            platform_tag_name: linux-ppc64le
+            goarch: ppc64le
+          - platform: linux/s390x
+            platform_tag_name: linux-s390x
+            goarch: s390x
+          - platform: linux/riscv64
+            platform_tag_name: linux-riscv64
+            goarch: riscv64
 
     name: ${{ matrix.platform }}
 
