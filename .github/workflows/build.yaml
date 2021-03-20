@@ -53,7 +53,7 @@ jobs:
             platform_tag_name: linux-riscv64
             goarch: riscv64
 
-    name: ${{ matrix.platform }}
+    name: ${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }} - ${{ matrix.platform }}
 
     runs-on: ubuntu-latest
 
