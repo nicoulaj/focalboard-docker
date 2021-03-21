@@ -41,7 +41,7 @@ docker run -p 8000:8000 nicoulaj/focalboard
 
     ```
     services:
-    focalboard:
+      focalboard:
         image: nicoulaj/focalboard
         volumes:
         - ./config.json:/opt/focalboard/config.json
