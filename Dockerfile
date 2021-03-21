@@ -9,7 +9,6 @@ RUN apt-get install -y nodejs
 RUN git clone -b ${FOCALBOARD_REF} --depth 1 https://github.com/mattermost/focalboard.git /focalboard
 WORKDIR /focalboard
 RUN sed -i "s/GOARCH=amd64/GOARCH=${TARGETARCH}/g" Makefile
-RUN cat Makefile
 RUN make prebuild
 RUN make
 RUN make server-linux-package
