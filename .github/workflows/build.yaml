@@ -18,6 +18,7 @@ jobs:
   build:
 
     strategy:
+      max-parallel: 1
       fail-fast: false
       matrix:
         platform: [ 'linux/amd64', 'linux/arm/v6', 'linux/arm/v7' ]
