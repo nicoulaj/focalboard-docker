@@ -1,10 +1,17 @@
-FROM --platform=$BUILDPLATFORM golang AS builder
+FROM golang AS builder-base
 
-ARG BUILDPLATFORM
+FROM builder-base AS builder-amd64
+ENV GOARCH "amd64"
+
+FROM builder-base AS builder-arm64
+ENV GOARCH "arm64"
+
+ARG TARGETARCH
 ARG FOCALBOARD_MAJOR
 ARG FOCALBOARD_MINOR
 ARG FOCALBOARD_INCREMENT
-ARG GOARCH
+
+FROM builder-$TARGETARCH AS builder
 
 RUN apt-get update
 RUN apt-get install -y npm
