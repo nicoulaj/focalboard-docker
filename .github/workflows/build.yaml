@@ -60,14 +60,3 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}
             ${{ env.DOCKERHUB_REPO }}:latest
           labels: ${{ steps.docker_meta.outputs.labels }}
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-
-      - name: Update repo description
-        if: github.event_name != 'pull_request'
-        uses: peter-evans/dockerhub-description@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ env.DOCKERHUB_REPO }}
