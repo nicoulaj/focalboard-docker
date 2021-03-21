@@ -1,13 +1,12 @@
 FROM golang AS builder
 
 ARG TARGETARCH
-ARG FOCALBOARD_MAJOR
-ARG FOCALBOARD_MINOR
-ARG FOCALBOARD_INCREMENT
+ARG FOCALBOARD_REF
 
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update
-RUN apt-get install -y npm
-RUN git clone -b "v${FOCALBOARD_MAJOR}.${FOCALBOARD_MINOR}.${FOCALBOARD_INCREMENT}" --depth 1 https://github.com/mattermost/focalboard.git /focalboard
+RUN apt-get install -y nodejs
+RUN git clone -b ${FOCALBOARD_REF} --depth 1 https://github.com/mattermost/focalboard.git /focalboard
 WORKDIR /focalboard
 RUN sed -i "s/GOARCH=amd64/GOARCH=${TARGETARCH}/g" Makefile
 RUN cat Makefile

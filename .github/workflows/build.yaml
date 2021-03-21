@@ -50,13 +50,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          platforms: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/mips64le,linux/ppc64le,linux/s390x
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           pull: true
           push: ${{ github.event_name != 'pull_request' }}
-          build-args: |
-            FOCALBOARD_MAJOR=${{ env.FOCALBOARD_MAJOR }}
-            FOCALBOARD_MINOR=${{ env.FOCALBOARD_MINOR }}
-            FOCALBOARD_INCREMENT=${{ env.FOCALBOARD_INCREMENT }}
+          build-args: FOCALBOARD_REF=v${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}
           tags: |
             ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}.${{ env.FOCALBOARD_INCREMENT }}
             ${{ env.DOCKERHUB_REPO }}:${{ env.FOCALBOARD_MAJOR }}.${{ env.FOCALBOARD_MINOR }}
