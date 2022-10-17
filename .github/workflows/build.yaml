@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Generate Docker image labels
-        uses: crazy-max/ghaction-docker-meta@v4.0.1
+        uses: crazy-max/ghaction-docker-meta@v4.1.0
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           label-custom: |
